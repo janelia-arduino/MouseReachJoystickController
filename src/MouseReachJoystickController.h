@@ -1,12 +1,12 @@
 // ----------------------------------------------------------------------------
-// MouseJoystickController.h
+// MouseReachJoystickController.h
 //
 //
 // Authors:
 // Peter Polidoro peter@polidoro.io
 // ----------------------------------------------------------------------------
-#ifndef MOUSE_JOYSTICK_CONTROLLER_H
-#define MOUSE_JOYSTICK_CONTROLLER_H
+#ifndef MOUSE_REACH_JOYSTICK_CONTROLLER_H
+#define MOUSE_REACH_JOYSTICK_CONTROLLER_H
 #include <ArduinoJson.h>
 #include <JsonStream.h>
 #include <Array.h>
@@ -27,26 +27,26 @@
 #include <StepperController.h>
 #include <StageController.h>
 
-#include "MouseJoystickController/Constants.h"
+#include "MouseReachJoystickController/Constants.h"
 
 
-class MouseJoystickController : public StageController
+class MouseReachJoystickController : public StageController
 {
 public:
-  MouseJoystickController();
+  MouseReachJoystickController();
   virtual void setup();
   virtual void update();
 
-  typedef mouse_joystick_controller::constants::Block block_t;
+  typedef mouse_reach_joystick_controller::constants::Block block_t;
   typedef Array<block_t,
-    mouse_joystick_controller::constants::BLOCK_COUNT_MAX> set_t;
+    mouse_reach_joystick_controller::constants::BLOCK_COUNT_MAX> set_t;
 
 	set_t getSet();
 	void clearSet();
 	size_t getBlockCount();
 	block_t addBlockToSet(block_t block);
 
-  typedef mouse_joystick_controller::constants::AssayStatus assay_status_t;
+  typedef mouse_reach_joystick_controller::constants::AssayStatus assay_status_t;
   assay_status_t getAssayStatus();
 
   void moveJoystickToBasePosition();
@@ -54,7 +54,7 @@ public:
   void activateLickport(long duration,
     long count);
 
-  typedef mouse_joystick_controller::constants::TrialTimingData trial_timing_data_t;
+  typedef mouse_reach_joystick_controller::constants::TrialTimingData trial_timing_data_t;
   trial_timing_data_t getTrialTimingData();
 
   void startTrial();
@@ -64,16 +64,16 @@ public:
   void restartAssay();
 
 private:
-  modular_server::Property properties_[mouse_joystick_controller::constants::PROPERTY_COUNT_MAX];
-  modular_server::Parameter parameters_[mouse_joystick_controller::constants::PARAMETER_COUNT_MAX];
-  modular_server::Function functions_[mouse_joystick_controller::constants::FUNCTION_COUNT_MAX];
-  modular_server::Callback callbacks_[mouse_joystick_controller::constants::CALLBACK_COUNT_MAX];
+  modular_server::Property properties_[mouse_reach_joystick_controller::constants::PROPERTY_COUNT_MAX];
+  modular_server::Parameter parameters_[mouse_reach_joystick_controller::constants::PARAMETER_COUNT_MAX];
+  modular_server::Function functions_[mouse_reach_joystick_controller::constants::FUNCTION_COUNT_MAX];
+  modular_server::Callback callbacks_[mouse_reach_joystick_controller::constants::CALLBACK_COUNT_MAX];
 
 	set_t set_;
   block_t dummy_block_;
 
   assay_status_t assay_status_;
-  EventController<mouse_joystick_controller::constants::EVENT_COUNT_MAX> event_controller_;
+  EventController<mouse_reach_joystick_controller::constants::EVENT_COUNT_MAX> event_controller_;
   EventId trial_timeout_event_id_;
 
   trial_timing_data_t trial_timing_data_;

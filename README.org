@@ -1,12 +1,12 @@
-#+TITLE: MouseJoystickController
+#+TITLE: MouseReachJoystickController
 #+AUTHOR: Peter Polidoro
 #+EMAIL: peter@polidoro.io
 
 * Library Information
-  - Name :: MouseJoystickController
+  - Name :: MouseReachJoystickController
   - Version :: 4.1.0
   - License :: BSD
-  - URL :: https://github.com/janelia-arduino/MouseJoystickController
+  - URL :: https://github.com/janelia-arduino/MouseReachJoystickController
   - Author :: Peter Polidoro
   - Email :: peter@polidoro.io
 
@@ -21,7 +21,7 @@
       "id": "getApi",
       "result": {
         "firmware": [
-          "MouseJoystickController"
+          "MouseReachJoystickController"
         ],
         "verbosity": "NAMES",
         "functions": [

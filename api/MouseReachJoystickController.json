@@ -2,7 +2,7 @@
   "id": "getApi",
   "result": {
     "firmware": [
-      "MouseJoystickController"
+      "MouseReachJoystickController"
     ],
     "verbosity": "GENERAL",
     "functions": [

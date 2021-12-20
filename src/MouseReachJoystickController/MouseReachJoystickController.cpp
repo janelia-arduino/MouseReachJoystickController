@@ -1,20 +1,20 @@
 // ----------------------------------------------------------------------------
-// MouseJoystickController.cpp
+// MouseReachJoystickController.cpp
 //
 //
 // Authors:
 // Peter Polidoro peter@polidoro.io
 // ----------------------------------------------------------------------------
-#include "../MouseJoystickController.h"
+#include "../MouseReachJoystickController.h"
 
 
-using namespace mouse_joystick_controller;
+using namespace mouse_reach_joystick_controller;
 
-MouseJoystickController::MouseJoystickController()
+MouseReachJoystickController::MouseReachJoystickController()
 {
 }
 
-void MouseJoystickController::setup()
+void MouseReachJoystickController::setup()
 {
   // Parent Setup
   StageController::setup();
@@ -104,7 +104,7 @@ void MouseJoystickController::setup()
 
   modular_server::Property & pull_threshold_property = modular_server_.createProperty(constants::pull_threshold_property_name,constants::pull_threshold_default);
   pull_threshold_property.setRange(constants::pull_threshold_min,constants::pull_threshold_max);
-  pull_threshold_property.attachPostSetValueFunctor(makeFunctor((Functor0 *)0,*this,&MouseJoystickController::updatePullThreshold));
+  pull_threshold_property.attachPostSetValueFunctor(makeFunctor((Functor0 *)0,*this,&MouseReachJoystickController::updatePullThreshold));
  
   modular_server::Property & push_threshold_property = modular_server_.createProperty(constants::push_threshold_property_name,constants::push_threshold_default);
   push_threshold_property.setRange(constants::push_threshold_min,constants::push_threshold_max);
@@ -141,7 +141,7 @@ void MouseJoystickController::setup()
 
   modular_server::Property & repeat_set_count_property = modular_server_.createProperty(constants::repeat_set_count_property_name,constants::repeat_set_count_default);
   repeat_set_count_property.setRange(constants::repeat_set_count_min,constants::repeat_set_count_max);
-  repeat_set_count_property.attachPostSetValueFunctor(makeFunctor((Functor0 *)0,*this,&MouseJoystickController::updateSetCount));
+  repeat_set_count_property.attachPostSetValueFunctor(makeFunctor((Functor0 *)0,*this,&MouseReachJoystickController::updateSetCount));
 
   modular_server::Property & start_trial_duration_property = modular_server_.createProperty(constants::start_trial_duration_property_name,constants::start_trial_duration_default);
   start_trial_duration_property.setRange(constants::start_trial_duration_min,constants::start_trial_duration_max);
@@ -173,18 +173,18 @@ void MouseJoystickController::setup()
 
   // Functions
   modular_server::Function & get_set_function = modular_server_.createFunction(constants::get_set_function_name);
-  get_set_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&MouseJoystickController::getSetHandler));
+  get_set_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&MouseReachJoystickController::getSetHandler));
   get_set_function.setResultTypeArray();
 
   modular_server::Function & clear_set_function = modular_server_.createFunction(constants::clear_set_function_name);
-  clear_set_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&MouseJoystickController::clearSetHandler));
+  clear_set_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&MouseReachJoystickController::clearSetHandler));
 
   modular_server::Function & get_block_count_function = modular_server_.createFunction(constants::get_block_count_function_name);
-  get_block_count_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&MouseJoystickController::getBlockCountHandler));
+  get_block_count_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&MouseReachJoystickController::getBlockCountHandler));
   get_block_count_function.setResultTypeLong();
 
   modular_server::Function & add_block_to_set_function = modular_server_.createFunction(constants::add_block_to_set_function_name);
-  add_block_to_set_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&MouseJoystickController::addBlockToSetHandler));
+  add_block_to_set_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&MouseReachJoystickController::addBlockToSetHandler));
   add_block_to_set_function.addParameter(repeat_trial_count_parameter);
   add_block_to_set_function.addParameter(pull_torque_parameter);
   add_block_to_set_function.addParameter(lickport_reward_duration_parameter);
@@ -192,41 +192,41 @@ void MouseJoystickController::setup()
   add_block_to_set_function.setResultTypeObject();
 
   modular_server::Function & start_assay_function = modular_server_.createFunction(constants::start_assay_function_name);
-  start_assay_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&MouseJoystickController::startAssayHandler));
+  start_assay_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&MouseReachJoystickController::startAssayHandler));
   start_assay_function.setResultTypeBool();
 
   modular_server::Function & get_assay_status_function = modular_server_.createFunction(constants::get_assay_status_function_name);
-  get_assay_status_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&MouseJoystickController::getAssayStatusHandler));
+  get_assay_status_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&MouseReachJoystickController::getAssayStatusHandler));
   get_assay_status_function.setResultTypeObject();
 
   modular_server::Function & move_joystick_to_base_position_function = modular_server_.createFunction(constants::move_joystick_to_base_position_function_name);
-  move_joystick_to_base_position_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&MouseJoystickController::moveJoystickToBasePositionHandler));
+  move_joystick_to_base_position_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&MouseReachJoystickController::moveJoystickToBasePositionHandler));
 
   modular_server::Function & move_joystick_to_reach_position_function = modular_server_.createFunction(constants::move_joystick_to_reach_position_function_name);
-  move_joystick_to_reach_position_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&MouseJoystickController::moveJoystickToReachPositionHandler));
+  move_joystick_to_reach_position_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&MouseReachJoystickController::moveJoystickToReachPositionHandler));
 
   modular_server::Function & activate_lickport_function = modular_server_.createFunction(constants::activate_lickport_function_name);
-  activate_lickport_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&MouseJoystickController::activateLickportHandler));
+  activate_lickport_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&MouseReachJoystickController::activateLickportHandler));
   activate_lickport_function.addParameter(lickport_activation_duration_parameter);
   activate_lickport_function.addParameter(lickport_activation_count_parameter);
 
   modular_server::Function & get_trial_timing_data_function = modular_server_.createFunction(constants::get_trial_timing_data_function_name);
-  get_trial_timing_data_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&MouseJoystickController::getTrialTimingDataHandler));
+  get_trial_timing_data_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&MouseReachJoystickController::getTrialTimingDataHandler));
   get_trial_timing_data_function.setResultTypeObject();
 
   // Callbacks
   modular_server::Callback & start_trial_callback = modular_server_.createCallback(constants::start_trial_callback_name);
-  start_trial_callback.attachFunctor(makeFunctor((Functor1<modular_server::Pin *> *)0,*this,&MouseJoystickController::startTrialHandler));
+  start_trial_callback.attachFunctor(makeFunctor((Functor1<modular_server::Pin *> *)0,*this,&MouseReachJoystickController::startTrialHandler));
 
   modular_server::Callback & abort_trial_callback = modular_server_.createCallback(constants::abort_trial_callback_name);
-  abort_trial_callback.attachFunctor(makeFunctor((Functor1<modular_server::Pin *> *)0,*this,&MouseJoystickController::abortTrialHandler));
+  abort_trial_callback.attachFunctor(makeFunctor((Functor1<modular_server::Pin *> *)0,*this,&MouseReachJoystickController::abortTrialHandler));
   abort_trial_callback.attachTo(modular_device_base::constants::bnc_a_pin_name,modular_server::constants::pin_mode_interrupt_falling);
 
   modular_server::Callback & abort_assay_callback = modular_server_.createCallback(constants::abort_assay_callback_name);
-  abort_assay_callback.attachFunctor(makeFunctor((Functor1<modular_server::Pin *> *)0,*this,&MouseJoystickController::abortAssayHandler));
+  abort_assay_callback.attachFunctor(makeFunctor((Functor1<modular_server::Pin *> *)0,*this,&MouseReachJoystickController::abortAssayHandler));
 
   modular_server::Callback & restart_assay_callback = modular_server_.createCallback(constants::restart_assay_callback_name);
-  restart_assay_callback.attachFunctor(makeFunctor((Functor1<modular_server::Pin *> *)0,*this,&MouseJoystickController::restartAssayHandler));
+  restart_assay_callback.attachFunctor(makeFunctor((Functor1<modular_server::Pin *> *)0,*this,&MouseReachJoystickController::restartAssayHandler));
   restart_assay_callback.attachTo(modular_device_base::constants::bnc_b_pin_name,modular_server::constants::pin_mode_interrupt_falling);
 #if defined(__MK64FX512__)
   restart_assay_callback.attachTo(modular_device_base::constants::btn_b_pin_name,modular_server::constants::pin_mode_interrupt_falling);
@@ -237,7 +237,7 @@ void MouseJoystickController::setup()
   assay_status_.state_ptr = &constants::state_assay_not_started_string;
 }
 
-void MouseJoystickController::update()
+void MouseReachJoystickController::update()
 {
   // Parent Update
   StageController::update();
@@ -432,12 +432,12 @@ void MouseJoystickController::update()
   }
 }
 
-MouseJoystickController::set_t MouseJoystickController::getSet()
+MouseReachJoystickController::set_t MouseReachJoystickController::getSet()
 {
 	return set_;
 }
 
-void MouseJoystickController::clearSet()
+void MouseReachJoystickController::clearSet()
 {
   if ((assay_status_.state_ptr == &constants::state_assay_not_started_string) ||
     (assay_status_.state_ptr == &constants::state_assay_finished_string))
@@ -448,12 +448,12 @@ void MouseJoystickController::clearSet()
   }
 }
 
-size_t MouseJoystickController::getBlockCount()
+size_t MouseReachJoystickController::getBlockCount()
 {
 	return set_.size();
 }
 
-MouseJoystickController::block_t MouseJoystickController::addBlockToSet(block_t block)
+MouseReachJoystickController::block_t MouseReachJoystickController::addBlockToSet(block_t block)
 {
   if (set_.full())
   {
@@ -473,12 +473,12 @@ MouseJoystickController::block_t MouseJoystickController::addBlockToSet(block_t 
   }
 }
 
-MouseJoystickController::assay_status_t MouseJoystickController::getAssayStatus()
+MouseReachJoystickController::assay_status_t MouseReachJoystickController::getAssayStatus()
 {
   return assay_status_;
 }
 
-void MouseJoystickController::moveJoystickToBasePosition()
+void MouseReachJoystickController::moveJoystickToBasePosition()
 {
   if ((assay_status_.state_ptr == &constants::state_assay_not_started_string) ||
     (assay_status_.state_ptr == &constants::state_assay_finished_string))
@@ -487,7 +487,7 @@ void MouseJoystickController::moveJoystickToBasePosition()
   }
 }
 
-void MouseJoystickController::moveJoystickToReachPosition()
+void MouseReachJoystickController::moveJoystickToReachPosition()
 {
   if ((assay_status_.state_ptr == &constants::state_assay_not_started_string) ||
     (assay_status_.state_ptr == &constants::state_assay_finished_string))
@@ -499,7 +499,7 @@ void MouseJoystickController::moveJoystickToReachPosition()
   }
 }
 
-void MouseJoystickController::activateLickport(long duration,
+void MouseReachJoystickController::activateLickport(long duration,
   long count)
 {
   if ((assay_status_.state_ptr == &constants::state_assay_not_started_string) ||
@@ -509,14 +509,14 @@ void MouseJoystickController::activateLickport(long duration,
   }
 }
 
-MouseJoystickController::trial_timing_data_t MouseJoystickController::getTrialTimingData()
+MouseReachJoystickController::trial_timing_data_t MouseReachJoystickController::getTrialTimingData()
 {
   assay_status_.unread_trial_timing_data = false;
 
   return trial_timing_data_;
 }
 
-void MouseJoystickController::startTrial()
+void MouseReachJoystickController::startTrial()
 {
   if (assay_status_.state_ptr == &constants::state_waiting_to_start_trial_string)
   {
@@ -532,7 +532,7 @@ void MouseJoystickController::startTrial()
   }
 }
 
-bool MouseJoystickController::startAssay()
+bool MouseReachJoystickController::startAssay()
 {
   if ((assay_status_.state_ptr == &constants::state_assay_not_started_string) ||
     (assay_status_.state_ptr == &constants::state_assay_finished_string))
@@ -547,7 +547,7 @@ bool MouseJoystickController::startAssay()
   return false;
 }
 
-void MouseJoystickController::abortTrial()
+void MouseReachJoystickController::abortTrial()
 {
   stopAll();
   event_controller_.removeAllEvents();
@@ -565,13 +565,13 @@ void MouseJoystickController::abortTrial()
   assay_status_.state_ptr = &constants::state_retract_string;
 }
 
-void MouseJoystickController::abortAssay()
+void MouseReachJoystickController::abortAssay()
 {
   assay_status_.assay_aborted = true;
   abortTrial();
 }
 
-void MouseJoystickController::restartAssay()
+void MouseReachJoystickController::restartAssay()
 {
   abortAssay();
   assay_status_.state_ptr = &constants::state_assay_not_started_string;
@@ -580,7 +580,7 @@ void MouseJoystickController::restartAssay()
 
 // private
 
-bool MouseJoystickController::setupClients()
+bool MouseReachJoystickController::setupClients()
 {
   bool setup_was_successful = true;
   bool call_was_successful;
@@ -607,7 +607,7 @@ bool MouseJoystickController::setupClients()
   return setup_was_successful;
 }
 
-StageController::PositionArray MouseJoystickController::getBasePosition()
+StageController::PositionArray MouseReachJoystickController::getBasePosition()
 {
   StageController::PositionArray base_position_array;
   modular_server_.property(constants::base_position_property_name).getValue(base_position_array);
@@ -615,7 +615,7 @@ StageController::PositionArray MouseJoystickController::getBasePosition()
   return base_position_array;
 }
 
-void MouseJoystickController::resetAssayStatus()
+void MouseReachJoystickController::resetAssayStatus()
 {
 	assay_status_t assay_status;
 	assay_status_ = assay_status;
@@ -625,7 +625,7 @@ void MouseJoystickController::resetAssayStatus()
   updateBlock();
 }
 
-void MouseJoystickController::setupAssay()
+void MouseReachJoystickController::setupAssay()
 {
   if (assay_status_.state_ptr == &constants::state_assay_started_string)
   {
@@ -633,21 +633,21 @@ void MouseJoystickController::setupAssay()
   }
 }
 
-void MouseJoystickController::setupTrial()
+void MouseReachJoystickController::setupTrial()
 {
   resetTrialTimingData();
   assay_status_.trial_aborted = false;
   assay_status_.unread_trial_timing_data = false;
 }
 
-void MouseJoystickController::addStartTrialEvent()
+void MouseReachJoystickController::addStartTrialEvent()
 {
   long start_trial_duration;
   modular_server_.property(constants::start_trial_duration_property_name).getValue(start_trial_duration);
 
   if (start_trial_duration > 0)
   {
-    EventId start_trial_event_id = event_controller_.addEventUsingDelay(makeFunctor((Functor1<int> *)0,*this,&MouseJoystickController::startTrialEventHandler),
+    EventId start_trial_event_id = event_controller_.addEventUsingDelay(makeFunctor((Functor1<int> *)0,*this,&MouseReachJoystickController::startTrialEventHandler),
       start_trial_duration*constants::milliseconds_per_second);
     event_controller_.enable(start_trial_event_id);
   }
@@ -657,7 +657,7 @@ void MouseJoystickController::addStartTrialEvent()
   }
 }
 
-void MouseJoystickController::checkForMouseReady()
+void MouseReachJoystickController::checkForMouseReady()
 {
   // todo: sense paws
   if (true)
@@ -670,7 +670,7 @@ void MouseJoystickController::checkForMouseReady()
   }
 }
 
-void MouseJoystickController::setupPull()
+void MouseReachJoystickController::setupPull()
 {
   encoder_interface_simple_ptr_->callUntilSuccessful(encoder_interface_simple::constants::enable_outputs_callback_name);
   encoder_interface_simple_ptr_->callUntilSuccessful(encoder_interface_simple::constants::set_position_function_name,
@@ -691,7 +691,7 @@ void MouseJoystickController::setupPull()
   long trial_timeout_duration;
   modular_server_.property(constants::trial_timeout_duration_property_name).getValue(trial_timeout_duration);
 
-  trial_timeout_event_id_ = event_controller_.addEventUsingDelay(makeFunctor((Functor1<int> *)0,*this,&MouseJoystickController::trialTimeoutEventHandler),
+  trial_timeout_event_id_ = event_controller_.addEventUsingDelay(makeFunctor((Functor1<int> *)0,*this,&MouseReachJoystickController::trialTimeoutEventHandler),
     trial_timeout_duration*constants::milliseconds_per_second);
   event_controller_.enable(trial_timeout_event_id_);
 
@@ -708,7 +708,7 @@ void MouseJoystickController::setupPull()
   assay_status_.state_ptr = &constants::state_waiting_for_pull_string;
 }
 
-void MouseJoystickController::checkForPullOrPush()
+void MouseReachJoystickController::checkForPullOrPush()
 {
   time_ = millis();
   if ((time_ - pull_push_poll_time_previous_) < constants::pull_push_poll_period)
@@ -759,7 +759,7 @@ void MouseJoystickController::checkForPullOrPush()
   }
 }
 
-void MouseJoystickController::reward()
+void MouseReachJoystickController::reward()
 {
   playRewardTone();
 
@@ -772,7 +772,7 @@ void MouseJoystickController::reward()
   assay_status_.state_ptr = &constants::state_retract_string;
 }
 
-void MouseJoystickController::checkTrialTermination()
+void MouseReachJoystickController::checkTrialTermination()
 {
   if (assay_status_.assay_aborted)
   {
@@ -793,7 +793,7 @@ void MouseJoystickController::checkTrialTermination()
   }
 }
 
-void MouseJoystickController::finishTrial()
+void MouseReachJoystickController::finishTrial()
 {
   assay_status_.state_ptr = &constants::state_move_to_base_start_string;
   ++assay_status_.finished_trial_count;
@@ -807,7 +807,7 @@ void MouseJoystickController::finishTrial()
   }
 }
 
-void MouseJoystickController::prepareNextTrial()
+void MouseReachJoystickController::prepareNextTrial()
 {
   bool block_needs_updating = updateTrialBlockSet();
   if (block_needs_updating)
@@ -816,13 +816,13 @@ void MouseJoystickController::prepareNextTrial()
   }
 }
 
-void MouseJoystickController::resetTrialTimingData()
+void MouseReachJoystickController::resetTrialTimingData()
 {
   trial_timing_data_t ttd;
   trial_timing_data_ = ttd;
 }
 
-bool MouseJoystickController::updateTrialBlockSet()
+bool MouseReachJoystickController::updateTrialBlockSet()
 {
   bool block_needs_updating = false;
   if (++assay_status_.trial_in_block >= assay_status_.block.repeat_trial_count)
@@ -846,7 +846,7 @@ bool MouseJoystickController::updateTrialBlockSet()
   return block_needs_updating;
 }
 
-void MouseJoystickController::updateBlock()
+void MouseReachJoystickController::updateBlock()
 {
   if (assay_status_.block_in_set < assay_status_.block_count)
   {
@@ -857,7 +857,7 @@ void MouseJoystickController::updateBlock()
   }
 }
 
-void MouseJoystickController::updatePullThreshold()
+void MouseReachJoystickController::updatePullThreshold()
 {
   long pull_threshold;
   modular_server_.property(constants::pull_threshold_property_name).getValue(pull_threshold);
@@ -865,7 +865,7 @@ void MouseJoystickController::updatePullThreshold()
   assay_status_.pull_threshold = pull_threshold;
 }
 
-void MouseJoystickController::updateSetCount()
+void MouseReachJoystickController::updateSetCount()
 {
   long repeat_set_count;
   modular_server_.property(constants::repeat_set_count_property_name).getValue(repeat_set_count);
@@ -873,19 +873,19 @@ void MouseJoystickController::updateSetCount()
   assay_status_.repeat_set_count = repeat_set_count;
 }
 
-void MouseJoystickController::moveToBasePosition()
+void MouseReachJoystickController::moveToBasePosition()
 {
   StageController::PositionArray base_position = getBasePosition();
   moveStageTo(base_position);
 }
 
-void MouseJoystickController::moveToReachPosition()
+void MouseReachJoystickController::moveToReachPosition()
 {
   StageController::PositionArray reach_position = assay_status_.block.reach_position;
   moveStageTo(reach_position);
 }
 
-void MouseJoystickController::playJoystickReadyTone()
+void MouseReachJoystickController::playJoystickReadyTone()
 {
   long joystick_ready_tone_frequency;
   modular_server_.property(constants::joystick_ready_tone_frequency_property_name).getValue(joystick_ready_tone_frequency);
@@ -906,7 +906,7 @@ void MouseJoystickController::playJoystickReadyTone()
     constants::joystick_ready_tone_count);
 }
 
-void MouseJoystickController::playRewardTone()
+void MouseReachJoystickController::playRewardTone()
 {
   long reward_tone_frequency;
   modular_server_.property(constants::reward_tone_frequency_property_name).getValue(reward_tone_frequency);
@@ -927,7 +927,7 @@ void MouseJoystickController::playRewardTone()
     constants::reward_tone_count);
 }
 
-void MouseJoystickController::triggerLickportReward()
+void MouseReachJoystickController::triggerLickportReward()
 {
   long lickport_reward_delay;
   modular_server_.property(constants::lickport_reward_delay_property_name).getValue(lickport_reward_delay);
@@ -937,7 +937,7 @@ void MouseJoystickController::triggerLickportReward()
   triggerLickport(lickport_reward_delay,duration,constants::lickport_reward_count);
 }
 
-void MouseJoystickController::triggerLickport(long delay,
+void MouseReachJoystickController::triggerLickport(long delay,
   long duration,
   long count)
 {
@@ -950,7 +950,7 @@ void MouseJoystickController::triggerLickport(long delay,
     count);
 }
 
-void MouseJoystickController::setHomeCurrent(size_t channel)
+void MouseReachJoystickController::setHomeCurrent(size_t channel)
 {
   if (channel >= constants::CHANNEL_COUNT)
   {
@@ -963,7 +963,7 @@ void MouseJoystickController::setHomeCurrent(size_t channel)
   modifyHoldCurrent(channel,home_current);
 }
 
-void MouseJoystickController::setIdleCurrent()
+void MouseReachJoystickController::setIdleCurrent()
 {
   long idle_current;
   for (size_t channel=0; channel < constants::CHANNEL_COUNT; ++channel)
@@ -975,13 +975,13 @@ void MouseJoystickController::setIdleCurrent()
   }
 }
 
-void MouseJoystickController::restoreCurrentSettings(size_t channel)
+void MouseReachJoystickController::restoreCurrentSettings(size_t channel)
 {
   restoreHoldCurrent(channel);
   restoreRunCurrent(channel);
 }
 
-bool MouseJoystickController::setupReadyPulse()
+bool MouseReachJoystickController::setupReadyPulse()
 {
   audio_controller_ptr_->callUntilSuccessful(modular_server::constants::set_pin_mode_function_name,
     modular_device_base::constants::bnc_b_pin_name,
@@ -989,7 +989,7 @@ bool MouseJoystickController::setupReadyPulse()
   return audio_controller_ptr_->callWasSuccessful();
 }
 
-bool MouseJoystickController::triggerReadyPulse()
+bool MouseReachJoystickController::triggerReadyPulse()
 {
   audio_controller_ptr_->callUntilSuccessful(modular_server::constants::set_pin_value_function_name,
     modular_device_base::constants::bnc_b_pin_name,
@@ -997,7 +997,7 @@ bool MouseJoystickController::triggerReadyPulse()
   return audio_controller_ptr_->callWasSuccessful();
 }
 
-bool MouseJoystickController::setupRewardPulse()
+bool MouseReachJoystickController::setupRewardPulse()
 {
   power_switch_controller_ptr_->callUntilSuccessful(modular_server::constants::set_pin_mode_function_name,
     modular_device_base::constants::bnc_b_pin_name,
@@ -1005,7 +1005,7 @@ bool MouseJoystickController::setupRewardPulse()
   return power_switch_controller_ptr_->callWasSuccessful();
 }
 
-bool MouseJoystickController::triggerRewardPulse()
+bool MouseReachJoystickController::triggerRewardPulse()
 {
   power_switch_controller_ptr_->callUntilSuccessful(modular_server::constants::set_pin_value_function_name,
     modular_device_base::constants::bnc_b_pin_name,
@@ -1013,7 +1013,7 @@ bool MouseJoystickController::triggerRewardPulse()
   return power_switch_controller_ptr_->callWasSuccessful();
 }
 
-bool MouseJoystickController::setupTrialTerminationPulse()
+bool MouseReachJoystickController::setupTrialTerminationPulse()
 {
   power_switch_controller_ptr_->callUntilSuccessful(modular_server::constants::set_pin_mode_function_name,
     modular_device_base::constants::bnc_a_pin_name,
@@ -1021,7 +1021,7 @@ bool MouseJoystickController::setupTrialTerminationPulse()
   return power_switch_controller_ptr_->callWasSuccessful();
 }
 
-bool MouseJoystickController::triggerTrialTerminationPulse()
+bool MouseReachJoystickController::triggerTrialTerminationPulse()
 {
   power_switch_controller_ptr_->callUntilSuccessful(modular_server::constants::set_pin_value_function_name,
     modular_device_base::constants::bnc_a_pin_name,
@@ -1029,7 +1029,7 @@ bool MouseJoystickController::triggerTrialTerminationPulse()
   return power_switch_controller_ptr_->callWasSuccessful();
 }
 
-void MouseJoystickController::writeBlockToResponse(block_t block)
+void MouseReachJoystickController::writeBlockToResponse(block_t block)
 {
   modular_server_.response().beginObject();
 
@@ -1041,7 +1041,7 @@ void MouseJoystickController::writeBlockToResponse(block_t block)
   modular_server_.response().endObject();
 }
 
-void MouseJoystickController::getSetHandler()
+void MouseReachJoystickController::getSetHandler()
 {
 	set_t set = getSet();
 
@@ -1057,18 +1057,18 @@ void MouseJoystickController::getSetHandler()
   modular_server_.response().endArray();
 }
 
-void MouseJoystickController::clearSetHandler()
+void MouseReachJoystickController::clearSetHandler()
 {
 	clearSet();
 }
 
-void MouseJoystickController::getBlockCountHandler()
+void MouseReachJoystickController::getBlockCountHandler()
 {
 	long block_count = getBlockCount();
   modular_server_.response().returnResult(block_count);
 }
 
-void MouseJoystickController::addBlockToSetHandler()
+void MouseReachJoystickController::addBlockToSetHandler()
 {
 	block_t block;
   modular_server_.parameter(constants::repeat_trial_count_parameter_name).getValue(block.repeat_trial_count);
@@ -1091,13 +1091,13 @@ void MouseJoystickController::addBlockToSetHandler()
   writeBlockToResponse(block_added);
 }
 
-void MouseJoystickController::startAssayHandler()
+void MouseReachJoystickController::startAssayHandler()
 {
   bool started = startAssay();
   modular_server_.response().returnResult(started);
 }
 
-void MouseJoystickController::getAssayStatusHandler()
+void MouseReachJoystickController::getAssayStatusHandler()
 {
 	assay_status_t assay_status = getAssayStatus();
 
@@ -1124,17 +1124,17 @@ void MouseJoystickController::getAssayStatusHandler()
 
 }
 
-void MouseJoystickController::moveJoystickToBasePositionHandler()
+void MouseReachJoystickController::moveJoystickToBasePositionHandler()
 {
   moveJoystickToBasePosition();
 }
 
-void MouseJoystickController::moveJoystickToReachPositionHandler()
+void MouseReachJoystickController::moveJoystickToReachPositionHandler()
 {
   moveJoystickToReachPosition();
 }
 
-void MouseJoystickController::activateLickportHandler()
+void MouseReachJoystickController::activateLickportHandler()
 {
   long lickport_activation_duration;
   modular_server_.parameter(constants::lickport_activation_duration_parameter_name).getValue(lickport_activation_duration);
@@ -1145,7 +1145,7 @@ void MouseJoystickController::activateLickportHandler()
   activateLickport(lickport_activation_duration,lickport_activation_count);
 }
 
-void MouseJoystickController::getTrialTimingDataHandler()
+void MouseReachJoystickController::getTrialTimingDataHandler()
 {
 	trial_timing_data_t trial_timing_data = getTrialTimingData();
 
@@ -1164,32 +1164,32 @@ void MouseJoystickController::getTrialTimingDataHandler()
   modular_server_.response().endObject();
 }
 
-void MouseJoystickController::startTrialHandler(modular_server::Pin * pin_ptr)
+void MouseReachJoystickController::startTrialHandler(modular_server::Pin * pin_ptr)
 {
   startTrial();
 }
 
-void MouseJoystickController::abortTrialHandler(modular_server::Pin * pin_ptr)
+void MouseReachJoystickController::abortTrialHandler(modular_server::Pin * pin_ptr)
 {
   abortTrial();
 }
 
-void MouseJoystickController::abortAssayHandler(modular_server::Pin * pin_ptr)
+void MouseReachJoystickController::abortAssayHandler(modular_server::Pin * pin_ptr)
 {
   abortAssay();
 }
 
-void MouseJoystickController::restartAssayHandler(modular_server::Pin * pin_ptr)
+void MouseReachJoystickController::restartAssayHandler(modular_server::Pin * pin_ptr)
 {
   restartAssay();
 }
 
-void MouseJoystickController::startTrialEventHandler(int arg)
+void MouseReachJoystickController::startTrialEventHandler(int arg)
 {
   startTrial();
 }
 
-void MouseJoystickController::trialTimeoutEventHandler(int arg)
+void MouseReachJoystickController::trialTimeoutEventHandler(int arg)
 {
   if (timeIsSet())
   {

@@ -5,8 +5,8 @@
 // Authors:
 // Peter Polidoro peter@polidoro.io
 // ----------------------------------------------------------------------------
-#ifndef MOUSE_JOYSTICK_CONTROLLER_CONSTANTS_H
-#define MOUSE_JOYSTICK_CONTROLLER_CONSTANTS_H
+#ifndef MOUSE_REACH_JOYSTICK_CONTROLLER_CONSTANTS_H
+#define MOUSE_REACH_JOYSTICK_CONTROLLER_CONSTANTS_H
 #include <ConstantVariable.h>
 #include <TimeLib.h>
 
@@ -19,7 +19,7 @@
 #include <AudioController.h>
 
 
-namespace mouse_joystick_controller
+namespace mouse_reach_joystick_controller
 {
 namespace constants
 {

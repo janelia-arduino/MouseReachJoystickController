@@ -10,7 +10,7 @@
 
 #if defined(__MK20DX256__)
 
-namespace mouse_joystick_controller
+namespace mouse_reach_joystick_controller
 {
 namespace constants
 {

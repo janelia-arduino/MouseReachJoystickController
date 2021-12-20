@@ -1,7 +1,7 @@
-#include <MouseJoystickController.h>
+#include <MouseReachJoystickController.h>
 
 
-MouseJoystickController dev;
+MouseReachJoystickController dev;
 
 void setup()
 {

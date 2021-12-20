@@ -8,13 +8,13 @@
 #include "Constants.h"
 
 
-namespace mouse_joystick_controller
+namespace mouse_reach_joystick_controller
 {
 namespace constants
 {
-CONSTANT_STRING(device_name,"mouse_joystick_controller");
+CONSTANT_STRING(device_name,"mouse_reach_joystick_controller");
 
-CONSTANT_STRING(firmware_name,"MouseJoystickController");
+CONSTANT_STRING(firmware_name,"MouseReachJoystickController");
 // Use semantic versioning http://semver.org/
 const modular_server::FirmwareInfo firmware_info =
 {
